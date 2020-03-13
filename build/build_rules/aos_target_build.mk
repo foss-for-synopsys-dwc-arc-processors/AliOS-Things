@@ -82,7 +82,7 @@ endif
 $(eval SUFFIX := $(3))
 $(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(2:.c=.o): $(strip $($(1)_LOCATION))$(2) $(CONFIG_FILE) $$(dir $(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(2)).d $(RESOURCES_DEPENDENCY) $(LIBS_DIR)/$(1)$(SUFFIX).c_opts $(PROCESS_PRECOMPILED_FILES) | $(EXTRA_PRE_BUILD_TARGETS)
 	$$(if $($(1)_START_PRINT),,$(eval $(1)_START_PRINT:=1) $(QUIET)$(ECHO) Compiling $(1) )
-	$(QUIET)$(CCACHE) $(CC) $($(1)_C_OPTS) -D__FILENAME__='"$$(notdir $$<)"' $(call COMPILER_SPECIFIC_DEPS_FILE,$(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(2:.c=.d)) -o $$@ $$< $(COMPILER_SPECIFIC_STDOUT_REDIRECT)
+	$(QUIET)$(CCACHE) $(CC) $($(1)_C_OPTS) -D__FILENAME__='"$$(notdir $$<)"' $(call COMPILER_SPECIFIC_DEPS_FILE,$(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(addsuffix .d,$(basename $(2)))) -o $$@ $$< $(COMPILER_SPECIFIC_STDOUT_REDIRECT)
 endef
 
 ###############################################################################
@@ -106,7 +106,7 @@ $(eval SUFFIX := $(3))
 -include $(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(patsubst %.cc,%.d,$(2:.cpp=.d))
 $(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(patsubst %.cc,%.o,$(2:.cpp=.o)): $(strip $($(1)_LOCATION))$(2) $(CONFIG_FILE) $$(dir $(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(2)).d $(RESOURCES_DEPENDENCY) $(LIBS_DIR)/$(1)$(SUFFIX).cpp_opts | $(EXTRA_PRE_BUILD_TARGETS)
 	$$(if $($(1)_START_PRINT),,$(eval $(1)_START_PRINT:=1) $(ECHO) Compiling $(1))
-	$(QUIET)$(CXX) $($(1)_CPP_OPTS) -o $$@ $$< $(COMPILER_SPECIFIC_STDOUT_REDIRECT)
+	$(QUIET)$(CXX) $($(1)_CPP_OPTS) $(call COMPILER_SPECIFIC_DEPS_FILE,$(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(addsuffix .d,$(basename $(2)))) -o $$@ $$< $(COMPILER_SPECIFIC_STDOUT_REDIRECT)
 endef
 
 ###############################################################################
@@ -117,7 +117,7 @@ define BUILD_S_RULE
 $(eval SUFFIX := $(3))
 $(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(strip $(patsubst %.S,%.o, $(2:.s=.o) )): $(strip $($(1)_LOCATION))$(2) $($(1)_PRE_BUILD_TARGETS) $(CONFIG_FILE) $$(dir $(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(strip $(patsubst %.S, %.o, $(2)))).d $(RESOURCES_DEPENDENCY) $(LIBS_DIR)/$(1)$(SUFFIX).as_opts $(PROCESS_PRECOMPILED_FILES) | $(EXTRA_PRE_BUILD_TARGETS)
 	$$(if $($(1)_START_PRINT),,$(eval $(1)_START_PRINT:=1) $(ECHO) Compiling $(1))
-	$(QUIET)$(AS) $($(1)_S_OPTS) -o $$@ $$< $(COMPILER_SPECIFIC_STDOUT_REDIRECT)
+	$(QUIET)$(AS) $($(1)_S_OPTS) $(call COMPILER_SPECIFIC_DEPS_FILE,$(OUTPUT_DIR)/$(MODULES_DIR)/$(call GET_BARE_LOCATION,$(1))$(addsuffix .d,$(basename $(2)))) -o $$@ $$< $(COMPILER_SPECIFIC_STDOUT_REDIRECT)
 endef
 
 ###############################################################################
@@ -152,7 +152,7 @@ $(LIBS_DIR)/$(1)$(SUFFIX).cpp_opts: $($(1)_PRE_BUILD_TARGETS) $(CONFIG_FILE) | $
 	$$(file >$$@, $($(1)_CPP_OPTS) )
 
 $(LIBS_DIR)/$(1)$(SUFFIX).as_opts: $(CONFIG_FILE) | $(LIBS_DIR)
-	$(eval $(1)_S_OPTS:=$(CPU_ASMFLAGS) $(COMPILER_SPECIFIC_COMP_ONLY_FLAG) $(COMPILER_UNI_SFLAGS) $($(1)_ASMFLAGS) $($(1)_INCLUDES) $(AOS_SDK_INCLUDES))
+	$(eval $(1)_S_OPTS:=$(CPU_ASMFLAGS) $(COMPILER_SPECIFIC_COMP_ONLY_FLAG) $(COMPILER_UNI_SFLAGS) $($(1)_ASMFLAGS) $($(1)_INCLUDES) $($(1)_DEFINES) $(AOS_SDK_INCLUDES) $(AOS_SDK_DEFINES))
 	$(eval S_OPTS_FILE := $($(1)_S_OPTS) )
 	$$(file >$$@, $(S_OPTS_FILE) )
 
