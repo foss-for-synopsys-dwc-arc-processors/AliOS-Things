@@ -9,6 +9,7 @@ $(NAME)_SOURCES := cli.c cli_adapt.c cli_default_command.c cli_dumpsys.c cli_cpu
 ifeq ($(COMPILER),armcc)
 else ifeq ($(COMPILER),rvct)
 else ifeq ($(COMPILER),iar)
+else ifeq ($(COMPILER),mwdt)
 else
 $(NAME)_CFLAGS  += -Wall -Werror
 endif

@@ -1,0 +1,13 @@
+config AOS_APP_HELLOCLI
+    bool "HelloCLI"
+    help
+        Hello CLI
+
+if AOS_APP_HELLOCLI
+# Configurations for app hellocli
+config SYSINFO_APP_VERSION
+    string "Firmware Version"
+    default "app-1.0.0-20200214.140831"
+    help
+        application main firmware version
+endif

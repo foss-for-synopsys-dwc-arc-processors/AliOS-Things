@@ -203,6 +203,12 @@ if AOS_APP_HELLOWORLD
         default "helloworld"
 endif
 
+source "application/example/example_legacy/hellocli/Config.in"
+if AOS_APP_HELLOCLI
+    config AOS_BUILD_APP
+        default "hellocli"
+endif
+
 source "application/example/example_legacy/halapp/Config.in"
 if AOS_APP_HALAPP
     config AOS_BUILD_APP
