@@ -333,6 +333,8 @@ else ifeq ($(COMPILER),rvct)
 export TOOLCHAIN_MAKEFILE := $(MAKEFILES_PATH)/toolchain/aos_toolchain_rvct.mk
 else ifeq ($(COMPILER),iar)
 export TOOLCHAIN_MAKEFILE := $(MAKEFILES_PATH)/toolchain/aos_toolchain_iar.mk
+else ifeq ($(COMPILER), mwdt)
+export TOOLCHAIN_MAKEFILE := $(MAKEFILES_PATH)/toolchain/aos_toolchain_mwdt.mk
 else
 export TOOLCHAIN_MAKEFILE := $(MAKEFILES_PATH)/toolchain/aos_toolchain_gcc.mk
 endif

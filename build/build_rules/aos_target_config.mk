@@ -408,6 +408,8 @@ else ifeq ($(COMPILER),rvct)
 include $(MAKEFILES_PATH)/toolchain/aos_toolchain_rvct.mk
 else ifeq ($(COMPILER),iar)
 include $(MAKEFILES_PATH)/toolchain/aos_toolchain_iar.mk
+else ifeq ($(COMPILER),mwdt)
+include $(MAKEFILES_PATH)/toolchain/aos_toolchain_mwdt.mk
 else
 include $(MAKEFILES_PATH)/toolchain/aos_toolchain_gcc.mk
 endif
