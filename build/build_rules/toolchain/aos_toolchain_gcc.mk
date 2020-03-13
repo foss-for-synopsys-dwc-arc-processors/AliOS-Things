@@ -7,3 +7,4 @@ include $(MAKEFILES_PATH)/toolchain/aos_toolchain_csky.mk
 include $(MAKEFILES_PATH)/toolchain/aos_toolchain_mips.mk
 include $(MAKEFILES_PATH)/toolchain/aos_toolchain_riscv32_unkown_elf_gcc.mk
 include $(MAKEFILES_PATH)/toolchain/aos_toolchain_nds32le-elf-newlib-v3.mk
+include $(MAKEFILES_PATH)/toolchain/aos_toolchain_arc_elf32.mk
