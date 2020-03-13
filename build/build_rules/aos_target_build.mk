@@ -300,6 +300,8 @@ endif
 $(STRIPPED_LINK_OUTPUT_FILE): $(LINK_OUTPUT_FILE)
 ifeq ($(COMPILER),iar)
 	$(QUIET)$(STRIP) $(STRIPFLAGS) $< $(STRIP_OUTPUT_PREFIX)$@
+else ifeq ($(COMPILER),mwdt)
+	$(QUIET)$(CP) $< $@
 else
 	$(QUIET)$(STRIP) $(STRIP_OUTPUT_PREFIX)$@ $(STRIPFLAGS) $<
 endif
