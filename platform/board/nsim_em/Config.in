@@ -1,0 +1,19 @@
+##
+# Copyright (c) 2020, Synopsys, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+##
+
+config AOS_BOARD_NSIM_EM
+    bool "Synopsys DesignWare ARC NSIM_EM Board"
+    select AOS_MCU_EMBARC
+    select CONFIG_NO_TCPIP
+    #select AOS_COMP_KERNEL_INIT
+    #select AOS_COMP_OSAL_AOS
+    help
+      configuration for board NSIM_EM
+
+if AOS_BOARD_NSIM_EM
+#configuration for board NSIM_EM
+
+endif #AOS_BOARD_NSIM_EM

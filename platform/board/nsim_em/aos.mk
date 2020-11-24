@@ -1,0 +1,74 @@
+##
+# Copyright (c) 2020, Synopsys, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+##
+
+NAME := board_nsim_em
+
+$(NAME)_MBINS_TYPE := kernel
+$(NAME)_VERSION    := 1.0.0
+$(NAME)_SUMMARY    := configuration for board nsim_em
+
+MODULE             := 1062
+HOST_ARCH          := ARC_EM
+HOST_MCU_FAMILY    := mcu_embarc
+SUPPORT_MBINS      := no
+HOST_MCU_NAME      := NSIM_EM
+
+$(NAME)_COMPONENTS += $(HOST_MCU_FAMILY) osal_aos kernel_init
+
+$(NAME)_SOURCES += k_config.c
+$(NAME)_SOURCES += startup.c
+$(NAME)_SOURCES += board.c
+
+BOARD ?= nsim
+BD_VER ?= 10
+CUR_CORE ?= arcem
+
+ifeq ($(COMPILER), mwdt)
+TOOLCHAIN := mw
+else
+TOOLCHAIN := gnu
+endif
+
+export BOARD
+export BD_VER
+export CUR_CORE
+export TOOLCHAIN
+
+
+
+# $(NAME)_SOURCES +=
+
+GLOBAL_DEFINES += CONFIG_NO_TCPIP
+
+#depends on sal module if select sal function via build option "AOS_NETWORK_SAL=y"
+AOS_NETWORK_SAL	?= n
+
+ifeq ($(COMPILER),mwdt)
+#GLOBAL_LDFLAGS +=  -Hhostlink
+TOOLCHAIN_DEF := -D__MW__
+else
+#GLOBAL_LDFLAGS +=  --specs=nsim.specs
+TOOLCHAIN_DEF := -D__GNU__ -D_HAVE_LIBGLOSS_
+endif
+
+GLOBAL_INCLUDES += .
+
+NSIM_STACK_CHECK := -DARC_FEATURE_STACK_CHECK=0 # 1: enable hardware stack check, 0 disable hardware stack check
+
+NISM_BOARD_FLAGS := $(NSIM_STACK_CHECK) $(TOOLCHAIN_DEF) -DBOARD_NSIM -DCURRENT_CORE=arcem -DEMBARC_TCF_GENERATED -DHW_VERSION=10 -DLIB_CLIB -DLIB_CONSOLE -D_HEAPSIZE=8192 -D_NSIM_ -D_STACKSIZE=2048 -D__MW__
+
+GLOBAL_CFLAGS += $(NISM_BOARD_FLAGS)
+GLOBAL_ASMFLAGS += $(NISM_BOARD_FLAGS)
+GLOBAL_CXXFLAGS += $(NISM_BOARD_FLAGS)
+
+CONFIG_SYSINFO_PRODUCT_MODEL := ALI_AOS_NSIM
+CONFIG_SYSINFO_DEVICE_NAME   := SYNOPSYS_ARC_NSIM
+
+# GLOBAL_CFLAGS += -DSYSINFO_PRODUCT_MODEL=\"$(CONFIG_SYSINFO_PRODUCT_MODEL)\"
+# GLOBAL_CFLAGS += -DSYSINFO_DEVICE_NAME=\"$(CONFIG_SYSINFO_DEVICE_NAME)\"
+# GLOBAL_CFLAGS += -DSYSINFO_OS_VERSION=\"$(CONFIG_SYSINFO_OS_VERSION)\"
+# GLOBAL_CFLAGS += -DSYSINFO_ARCH=\"$(HOST_ARCH)\"
+# GLOBAL_CFLAGS += -DSYSINFO_MCU=\"$(HOST_MCU_NAME)\"
